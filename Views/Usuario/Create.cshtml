@@ -1,0 +1,14 @@
+@{ 
+    ViewData["Title"] = "Crear Usuario";
+}
+
+@model Usuario
+
+<h1>@ViewData["Title"]</h1>
+<form asp-controller="Usuario" asp-action="Create">
+    <div class="form-group">
+        <label for="NombreDeUsuario">Nombre de usuario</label>
+        <input asp-for = "@Model.NombreDeUsuario" class="form-control" id="NombreDeUsuario">
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
