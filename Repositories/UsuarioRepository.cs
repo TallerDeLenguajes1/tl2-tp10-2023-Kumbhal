@@ -13,11 +13,13 @@ namespace tl2_tp10_2023_Kumbhal.Repositories{
     public class  UsuarioRepository : IUsuarioRepository{
         private string cadenaConexion = "Data Source=DB/kanban.db;Cache=Shared";
         public void Create(Usuario usuario){
-            var query = $"INSERT INTO Usuario (nombre_de_usuario) VALUES (@nombre);";
+            var query = $"INSERT INTO Usuario (nombre_de_usuario, contrasenia, rol_usuario) VALUES (@nombre, @contrasenia, @rol);";
             using (SQLiteConnection connection = new SQLiteConnection(cadenaConexion)){
                 connection.Open();
                 var command = new SQLiteCommand(query, connection);
                 command.Parameters.Add(new SQLiteParameter("@nombre", usuario.NombreDeUsuario));
+                command.Parameters.Add(new SQLiteParameter("@contrasenia", usuario.Contrasenia));
+                command.Parameters.Add(new SQLiteParameter("@rol", 1));
                 command.ExecuteNonQuery();
                 connection.Close();
             }

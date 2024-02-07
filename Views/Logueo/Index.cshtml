@@ -1,0 +1,17 @@
+@{ 
+    ViewData["Title"] = "Inicio de Sesion";
+}   
+
+<h1 class = "text-center">@ViewData["Title"]</h1>
+<form asp-controller="Logueo" asp-action="Login">
+    <div class="form-group">
+        <label for="NombreDeUsuario">Nombre de usuario</label>
+        <input class="form-control" id="NombreDeUsuario">
+    </div>
+    <div class="form-group">
+        <label for="Contrasenia">Contraseña</label>
+        <input class="form-control" id="Contrasenia">
+    </div>
+    <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+</form>
+</div>
