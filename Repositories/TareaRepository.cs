@@ -3,6 +3,7 @@ using tl2_tp10_2023_Kumbhal.Models;
 
 public interface ITareaRepository{
     public Tarea Create(Tarea tarea);
+    public List<Tarea> GetAll();
     public void UpdateNombre(int id, string nombre);
     public void UpdateEstado(int id, EstadoTarea estado);
     public Tarea GetById(int id);
@@ -28,6 +29,30 @@ namespace tl2_tp10_2023_Kumbhal.Repositories{
                 connection.Close();
             }
             return tarea;
+        }
+        public List<Tarea> GetAll() {
+            var query = "SELECT * FROM Tarea;";
+            List<Tarea> tareas = new List<Tarea>();
+            using(SQLiteConnection connection = new SQLiteConnection(cadenaConexion)) {
+                SQLiteCommand command = new SQLiteCommand(query, connection);
+                connection.Open();
+                using(SQLiteDataReader reader = command.ExecuteReader()) {
+                    while(reader.Read()) {
+                        var tarea = new Tarea() {
+                            Id = Convert.ToInt32(reader["id"]),
+                            IdTablero = Convert.ToInt32(reader["id_tablero"]),
+                            Nombre = reader["nombre"].ToString(),
+                            Estado = (EstadoTarea)Convert.ToInt32(reader["estado"]),
+                            Descripcion = reader["descripcion"].ToString(),
+                            Color = reader["color"].ToString(),
+                            IdUsuarioAsignado = Convert.ToInt32(reader["id_usuario_asignado"]) 
+                        };
+                        tareas.Add(tarea);
+                    }
+                }
+                connection.Close();
+            }
+            return tareas;
         }
         public void UpdateNombre(int id, string nombre){
             var query = $"UPDATE Tarea SET nombre = @nombre WHERE id = @id;";

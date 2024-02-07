@@ -1,0 +1,41 @@
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@model List<Tarea>
+
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Name</th>
+        <th scope="col">Description</th>
+        <th scope="col">Color</th>
+        <th scope="col">State</th>
+        <th scope="col">Board ID</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(Tarea tarea in Model) {
+            <tr>
+                <td>@tarea.Id</td>
+                <td>@tarea.Nombre</td>
+                <td>@tarea.Descripcion</td>
+                <td>@tarea.Color</td>
+                <td>@Enum.GetName(tarea.Estado)</td>
+                <td>@tarea.IdTablero</td>
+                <td>
+                    <button class="btn btn-primary">
+                        <a asp-controller="Tarea" asp-action="Update" asp-route-id="@tarea.Id" class="badge badge-primary">Update</a>
+                    </button>
+                    <button class="btn btn-primary">
+                        <a asp-controller="Tarea" asp-action="Remove" asp-route-id="@tarea.Id" class="badge badge-primary">Remove</a>
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+    <button class="btn btn-outline-primary">
+        <a asp-controller="Tasks" asp-action="Add">Add Task</a>
+    </button>
+</table>
