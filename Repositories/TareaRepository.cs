@@ -4,8 +4,7 @@ using tl2_tp10_2023_Kumbhal.Models;
 public interface ITareaRepository{
     public Tarea Create(Tarea tarea);
     public List<Tarea> GetAll();
-    public void UpdateNombre(int id, string nombre);
-    public void UpdateEstado(int id, EstadoTarea estado);
+    public void Update(int id, Tarea tarea);
     public Tarea GetById(int id);
     public List<Tarea> GetAllById(int idUsuario);
     public void Remove(int id);
@@ -54,28 +53,22 @@ namespace tl2_tp10_2023_Kumbhal.Repositories{
             }
             return tareas;
         }
-        public void UpdateNombre(int id, string nombre){
-            var query = $"UPDATE Tarea SET nombre = @nombre WHERE id = @id;";
+        public void Update(int id, Tarea tarea){
+            var query = $"UPDATE Tarea SET nombre = @nombre, estado = @estado, descripcion = @descripcion, color = @color, id_usuario_asignado = @idUsuario WHERE id = @id;";
             using(SQLiteConnection connection = new SQLiteConnection(cadenaConexion)){
                 connection.Open();
                 var command = new SQLiteCommand(query, connection);
-                command.Parameters.Add(new SQLiteParameter("@nombre", nombre));
+                command.Parameters.Add(new SQLiteParameter("@nombre", tarea.Nombre));
+                command.Parameters.Add(new SQLiteParameter("@estado", tarea.Estado));
+                command.Parameters.Add(new SQLiteParameter("@descripcion", tarea.Descripcion));
+                command.Parameters.Add(new SQLiteParameter("@color", tarea.Color));
+                command.Parameters.Add(new SQLiteParameter("@idUsuario", tarea.IdUsuarioAsignado));
                 command.Parameters.Add(new SQLiteParameter("@id", id));
                 command.ExecuteNonQuery();
                 connection.Close();
             }
         }
-        public void UpdateEstado(int id, EstadoTarea estado){
-            var query = $"UPDATE Tarea SET estado = @estado WHERE id = @id";
-            using(SQLiteConnection connection = new SQLiteConnection(cadenaConexion)){
-                connection.Open();
-                var command = new SQLiteCommand(query, connection);
-                command.Parameters.Add(new SQLiteParameter("@estado", estado));
-                command.Parameters.Add(new SQLiteParameter("@id", id));
-                command.ExecuteNonQuery();
-                connection.Close();
-            }
-        }
+        
         public Tarea GetById(int id){
             Tarea tarea = new Tarea();
             using(SQLiteConnection connection = new SQLiteConnection(cadenaConexion)){

@@ -36,8 +36,8 @@ public class TareaController : Controller {
     }
 
     [HttpPost]
-    public IActionResult Update (Tarea tarea, string? nombre) {
-        tareaRepository.UpdateNombre(tarea.Id, nombre);
+    public IActionResult Update (int id, Tarea tarea) {
+        tareaRepository.Update(tarea.Id, tarea);
         return RedirectToAction("Index");
     }
 

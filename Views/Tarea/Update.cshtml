@@ -7,6 +7,8 @@
 <h1>@ViewData["Title"]</h1>
 <form asp-controller="Tarea" asp-action="Update">
     <input hidden asp-for = "@Model.Id">
+    <input hidden asp-for = "@Model.IdTablero">
+    <input hidden asp-for = "@Model.IdUsuarioAsignado">
     <div class="form-group">
         <label for="nombre">Nombre de la tarea</label>
         <input asp-for = "@Model.Nombre" class="form-control" id="nombre" required>
@@ -19,9 +21,14 @@
         <label for="color">Color</label>
         <input asp-for = "@Model.Color" class="form-control" id="color">
     </div>
-    <div class="form-group">
-        <label for="state">Estado (0: Idea, 1: ToDo, 2: Doing, 3:Review, 4: Done)</label>
-        <input asp-for = "@Model.Estado" class="form-control" id="state">
+    <div> 
+        <select asp-for="Estado" class="form-control">
+        <option value="">Seleccione un estado</option>
+            @foreach (var estado in Enum.GetValues(typeof(EstadoTarea)))
+            {
+                <option value="@((int)estado)">@estado.ToString()</option>
+            }
+        </select>
     </div>
     <button type="submit" class="btn btn-primary">Enviar</button>
 </form>
