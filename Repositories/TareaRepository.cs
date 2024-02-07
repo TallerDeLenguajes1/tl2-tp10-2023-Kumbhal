@@ -20,7 +20,7 @@ namespace tl2_tp10_2023_Kumbhal.Repositories{
                 SQLiteCommand command = new SQLiteCommand(query,connection);
                 command.Parameters.Add(new SQLiteParameter("@idTablero", tarea.IdTablero));
                 command.Parameters.Add(new SQLiteParameter("@nombre", tarea.Nombre));
-                command.Parameters.Add(new SQLiteParameter("@estado", tarea.Estado));
+                command.Parameters.Add(new SQLiteParameter("@estado", 1));
                 command.Parameters.Add(new SQLiteParameter("@descripcion", tarea.Descripcion));
                 command.Parameters.Add(new SQLiteParameter("@color", tarea.Color));
                 command.Parameters.Add(new SQLiteParameter("@idUsuarioAsignado", tarea.IdUsuarioAsignado));
