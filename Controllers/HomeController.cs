@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Data.SQLite;
 using Microsoft.AspNetCore.Mvc;
 using tl2_tp10_2023_Kumbhal.Models;
 
@@ -18,6 +19,9 @@ public class HomeController : Controller
         return View();
     }
 
+    public void HelpChecker(){
+        
+    }
     public IActionResult Privacy()
     {
         return View();

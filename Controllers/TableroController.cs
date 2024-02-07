@@ -21,7 +21,7 @@ public class TableroController : Controller {
 
 
     [HttpGet]
-    public IActionResult Add(){
+    public IActionResult Create(){
         return View(new Tablero());
     } 
 

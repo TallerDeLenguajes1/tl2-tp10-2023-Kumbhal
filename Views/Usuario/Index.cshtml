@@ -18,13 +18,16 @@
                 <td>@usuario.NombreDeUsuario</td>
                 <td>
                     <button class="btn btn-primary">
-                        <a asp-controller="User" asp-action="Update" asp-route-id="@usuario.Id" class="badge badge-primary">Update</a>
+                        <a asp-controller="Usuario" asp-action="Update" asp-route-id="@usuario.Id" class="badge badge-primary">Update</a>
                     </button>
                     <button class="btn btn-primary">
-                        <a asp-controller="User" asp-action="Remove" asp-route-id="@usuario.Id" class="badge badge-primary">Delete</a>
+                        <a asp-controller="Usuario" asp-action="Remove" asp-route-id="@usuario.Id" class="badge badge-primary">Delete</a>
                     </button>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+        <button class="btn btn-primary">
+                        <a asp-controller="Usuario" asp-action="Create" class="badge badge-primary">Create</a>
+        </button>

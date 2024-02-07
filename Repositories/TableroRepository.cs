@@ -25,11 +25,12 @@ namespace tl2_tp10_2023_Kumbhal.Repositories{
             }
         }
         public void Update(int id, Tablero tableroModificar){
-            var query = $"UPDATE Tablero SET id_usuario_propietario = @usuarioPropietario, nombre = @nombre, descripcion = @descripcion WHERE id = Id;";
+            var query = $"UPDATE Tablero SET id_usuario_propietario = @usuarioPropietario, nombre = @nombre, descripcion = @descripcion WHERE id = @id;";
             using (SQLiteConnection connection = new SQLiteConnection(cadenaConexion)){
                 connection.Open();
                 var command = new SQLiteCommand(query,connection);
-                command.Parameters.Add(new SQLiteParameter("@usuarioPropietario",tableroModificar.IdUsuarioPropietario));
+                command.Parameters.Add(new SQLiteParameter("@id",id));
+                command.Parameters.Add(new SQLiteParameter("@usuarioPropietario", tableroModificar.IdUsuarioPropietario));
                 command.Parameters.Add(new SQLiteParameter("@nombre", tableroModificar.Nombre));
                 command.Parameters.Add(new SQLiteParameter("@descripcion", tableroModificar.Descripcion));
                 command.ExecuteNonQuery();
@@ -37,11 +38,12 @@ namespace tl2_tp10_2023_Kumbhal.Repositories{
             }
         }
         public Tablero GetById(int id){
-            var query = $"SELECT * FROM Tablero WHERE id = @Id;";
+            var query = $"SELECT * FROM Tablero WHERE id = @id;";
             Tablero tablero = new Tablero();
             using (SQLiteConnection connection = new SQLiteConnection(cadenaConexion)){
                 connection.Open();
                 var command = new SQLiteCommand(query,connection);
+                command.Parameters.Add(new SQLiteParameter("@id", id));
                 using(SQLiteDataReader reader = command.ExecuteReader()){
                     while(reader.Read()){
                         tablero.Id = id;

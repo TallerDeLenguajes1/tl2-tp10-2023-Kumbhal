@@ -42,39 +42,38 @@ namespace tl2_tp10_2023_Kumbhal.Repositories{
                 using(SQLiteDataReader reader = command.ExecuteReader()){
                     while(reader.Read()){
                         var usuario = new Usuario();
-                        usuario.Id = Convert.ToInt32(reader["id"]);
-                        usuario.NombreDeUsuario = reader["nombre_de_usuario"].ToString();
+                            usuario.Id = Convert.ToInt32(reader["id"]);
+                            usuario.NombreDeUsuario = reader["nombre_de_usuario"].ToString();
                         listaUsuarios.Add(usuario);
                     }
-                command.ExecuteNonQuery();
                 connection.Close();
                 }
             }
             return listaUsuarios;
         }
         public Usuario GetById(int id){
-            var query = $"SELECT * FROM Usuario WHERE id = @idUsuario;";
+            var query = $"SELECT * FROM Usuario WHERE id = @id;";
             Usuario usuario = new Usuario();
             using(SQLiteConnection connection = new SQLiteConnection(cadenaConexion)){
-                connection.Open();
                 var command = new SQLiteCommand(query, connection);
+                command.Parameters.Add(new SQLiteParameter("@id", id));
+                connection.Open();
                 using(SQLiteDataReader reader = command.ExecuteReader()){
                     while(reader.Read()){
                         usuario.Id = Convert.ToInt32(reader["id"]);
                         usuario.NombreDeUsuario = reader["nombre_de_usuario"].ToString();
                     }
                 }
-                command.ExecuteNonQuery();
                 connection.Close();
             }
             return usuario;
         }
         public void Remove (int id){
             using(SQLiteConnection connection = new SQLiteConnection(cadenaConexion)){
-                connection.Open();
-                var query = $"DELETE * FROM Usuario WHERE id = @idUsuario;";
+                var query = $"DELETE FROM Usuario WHERE id = @idUsuario;";
                 SQLiteCommand command = new SQLiteCommand(query, connection);
-                command.Parameters.Add(new SQLiteParameter("@id", id));
+                command.Parameters.Add(new SQLiteParameter("@idUsuario", id));
+                connection.Open();
                 command.ExecuteNonQuery();
                 connection.Close();
             }

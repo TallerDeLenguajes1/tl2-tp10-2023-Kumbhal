@@ -19,7 +19,7 @@ public class UsuarioController : Controller {
 
 
     [HttpGet]
-    public IActionResult Add() => View(new Usuario());
+    public IActionResult Create() => View(new Usuario());
 
     [HttpPost]
     public IActionResult Create(Usuario usuario) {

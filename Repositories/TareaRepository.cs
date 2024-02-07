@@ -94,7 +94,6 @@ namespace tl2_tp10_2023_Kumbhal.Repositories{
                         tarea.IdUsuarioAsignado = Convert.ToInt32(reader["id_usuario_asignado"]);
                     }
                 }
-                command.ExecuteNonQuery();
                 connection.Close();
             }
             return tarea;
@@ -119,7 +118,6 @@ namespace tl2_tp10_2023_Kumbhal.Repositories{
                         tareas.Add(tarea);
                     }
                 }
-                command.ExecuteNonQuery();
                 connection.Close();
             }
             return tareas;
@@ -127,9 +125,9 @@ namespace tl2_tp10_2023_Kumbhal.Repositories{
         public void Remove(int id){
             using (SQLiteConnection connection = new SQLiteConnection(cadenaConexion)){
                 var query = $"DELETE FROM Tarea WHERE id = @id;";
-                connection.Open();
                 SQLiteCommand command = new SQLiteCommand(query, connection);
                 command.Parameters.Add(new SQLiteParameter("@id", id));
+                connection.Open();
                 command.ExecuteNonQuery();
                 connection.Close();
             }
