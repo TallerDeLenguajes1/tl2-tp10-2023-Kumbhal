@@ -1,33 +1,49 @@
 @{
     ViewData["Title"] = "Principal";
 }
-
-@model List<Usuario>
+@using tl2_tp10_2023_Kumbhal.ViewModels
+@model ListarUsuariosViewModel
 
 <table class="table">
-    <thead class="thead-dark">
-        <tr>
-        <th scope="col">Id</th>
-        <th scope="col">NombreDeUsuario</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach(Usuario usuario in Model) {
+    @if((int)ViewContext.HttpContext.Session.GetInt32("Rol")! == 1){
+        <thead class="thead-dark">
             <tr>
-                <td>@usuario.Id</td>
-                <td>@usuario.NombreDeUsuario</td>
-                <td>
+                <th scope="col">Id</th>
+                <th scope="col">NombreDeUsuario</th>
+                <th scope="col">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(Usuario usuario in @Model.listadoUsuarios!){
+                <tr>
+                    <td>@usuario.Id</td>
+                    <td>@usuario.NombreDeUsuario</td>
+                    <td>
+                        <button class="btn btn-primary">
+                            <a asp-controller="Usuario" asp-action="Update" asp-route-id="@usuario.Id" class="badge badge-primary">Update</a>
+                        </button>
+                        <button class="btn btn-primary">
+                            <a asp-controller="Usuario" asp-action="Remove" asp-route-id="@usuario.Id" class="badge badge-primary">Delete</a>
+                        </button>
+                    </td>
+                </tr>
+            }
+            <button class="btn btn-primary">
+                        <a asp-controller="Usuario" asp-action="Create" class="badge badge-primary">Create</a>
+            </button>
+        </tbody>
+    } else {
+        <tbody>
+            <tr>
+                <td colspan="3">
                     <button class="btn btn-primary">
-                        <a asp-controller="Usuario" asp-action="Update" asp-route-id="@usuario.Id" class="badge badge-primary">Update</a>
+                        <a asp-controller="Usuario" asp-action="Update" asp-route-id="@ViewContext.HttpContext.Session.GetInt32("Id")" class="badge badge-primary">Cambiar Nombre</a>
                     </button>
                     <button class="btn btn-primary">
-                        <a asp-controller="Usuario" asp-action="Remove" asp-route-id="@usuario.Id" class="badge badge-primary">Delete</a>
+                        <a asp-controller="Usuario" asp-action="Remove" asp-route-id="@ViewContext.HttpContext.Session.GetInt32("Id")" class="badge badge-primary">Borrar Usuario</a>
                     </button>
                 </td>
             </tr>
-        }
-    </tbody>
+        </tbody>
+    }
 </table>
-        <button class="btn btn-primary">
-                        <a asp-controller="Usuario" asp-action="Create" class="badge badge-primary">Create</a>
-        </button>

@@ -31,7 +31,8 @@ public class LogueoController : Controller{
     }
     public void LoguearUsuario(Usuario usuarioLogueo){
         HttpContext.Session.SetString("Usuario", usuarioLogueo.NombreDeUsuario!);
-        HttpContext.Session.SetInt32("Rol", usuarioLogueo.RolUsuario);
+        HttpContext.Session.SetInt32("Rol", (int)usuarioLogueo.RolUsuario);
+        HttpContext.Session.SetInt32("Id", usuarioLogueo.Id);
     }
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error() {

@@ -2,14 +2,29 @@
     ViewData["Title"] = "Update Usuario";
 }
 
-@model Usuario
+@using tl2_tp10_2023_Kumbhal.ViewModels
+
+@model ModificarUsuarioViewModel
 
 <h1>@ViewData["Title"]</h1>
 <form asp-controller="Usuario" asp-action="Update">
-    <input hidden asp-for = "@Model.Id">
+    <input hidden asp-for="@Model.MUVMContrasenia">
     <div class="form-group">
         <label for="NombreDeUsuario">Nuevo nombre de usuario</label>
-        <input asp-for = "@Model.NombreDeUsuario" class="form-control" id="NombreDeUsuario">
+        <input asp-for = "@Model.MUVMUsuario" class="form-control" id="NombreDeUsuario">
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
+    @if(ViewContext.HttpContext.Session.GetInt32("Rol") == 1){
+        <div> 
+        <select asp-for ="@Model.MUVMRoles"class="form-control">
+        <option value="">Seleccione un rol</option>
+            @foreach (var estado in Enum.GetValues(typeof(Roles)))
+            {
+                <option value="@((int)estado)">@estado.ToString()</option>
+            }
+        </select>
+    </div>
+    }else{
+        Model.MUVMRoles = (Roles)ViewContext.HttpContext.Session.GetInt32("Rol");
+    }
+    <button type="submit" class="btn btn-primary">Enviar</button>
 </form>

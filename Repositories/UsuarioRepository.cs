@@ -19,18 +19,20 @@ namespace tl2_tp10_2023_Kumbhal.Repositories{
                 var command = new SQLiteCommand(query, connection);
                 command.Parameters.Add(new SQLiteParameter("@nombre", usuario.NombreDeUsuario));
                 command.Parameters.Add(new SQLiteParameter("@contrasenia", usuario.Contrasenia));
-                command.Parameters.Add(new SQLiteParameter("@rol", 1));
+                command.Parameters.Add(new SQLiteParameter("@rol", 2));
                 command.ExecuteNonQuery();
                 connection.Close();
             }
         }
         public void Update(int id, Usuario usuarioModificar){
-            var query = $"UPDATE Usuario SET nombre_de_usuario = @nombre WHERE id = @idUsuario;";
+            var query = $"UPDATE Usuario SET nombre_de_usuario = @nombre, contrasenia = @contrasenia, rol_usuario = @rol WHERE id = @idUsuario;";
             using(SQLiteConnection connection = new SQLiteConnection(cadenaConexion)){
-                connection.Open();
                 var command = new SQLiteCommand(query, connection);
                 command.Parameters.Add(new SQLiteParameter("@nombre", usuarioModificar.NombreDeUsuario));
                 command.Parameters.Add(new SQLiteParameter("@idUsuario", id));
+                command.Parameters.Add(new SQLiteParameter("@contrasenia", usuarioModificar.Contrasenia));
+                command.Parameters.Add(new SQLiteParameter("@rol",(int)usuarioModificar.RolUsuario));
+                connection.Open();
                 command.ExecuteNonQuery();
                 connection.Close();
             }
@@ -47,7 +49,7 @@ namespace tl2_tp10_2023_Kumbhal.Repositories{
                             usuario.Id = Convert.ToInt32(reader["id"]);
                             usuario.Contrasenia = reader["contrasenia"].ToString();
                             usuario.NombreDeUsuario = reader["nombre_de_usuario"].ToString();
-                            usuario.RolUsuario = Convert.ToInt32(reader["rol_usuario"]);
+                            usuario.RolUsuario = (Roles)Convert.ToInt32(reader["rol_usuario"]);
                         listaUsuarios.Add(usuario);
                     }
                 connection.Close();
@@ -66,6 +68,8 @@ namespace tl2_tp10_2023_Kumbhal.Repositories{
                     while(reader.Read()){
                         usuario.Id = Convert.ToInt32(reader["id"]);
                         usuario.NombreDeUsuario = reader["nombre_de_usuario"].ToString();
+                        usuario.Contrasenia = reader["contrasenia"].ToString();
+                        usuario.RolUsuario = (Roles)Convert.ToInt32(reader["rol_usuario"]);
                     }
                 }
                 connection.Close();

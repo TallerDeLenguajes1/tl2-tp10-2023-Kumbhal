@@ -17,7 +17,7 @@ public class TableroController : Controller {
 
     [HttpGet]
     public IActionResult Index(){
-        if (HttpContext.Session.GetString("Usuario") == null)
+        if (Log())
             {
                 // Si no está autenticado, redirigir al controlador de Logueo
                 return RedirectToAction("Index", "Logueo");
@@ -59,5 +59,7 @@ public class TableroController : Controller {
     public IActionResult Error() {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
-    private bool Logged() => HttpContext.Session != null;
+    private bool Log(){
+        return (HttpContext.Session.GetString("Usuario") == null);
+    }
 } 

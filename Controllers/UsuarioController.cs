@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using tl2_tp10_2023_Kumbhal.Repositories;
 using tl2_tp10_2023_Kumbhal.Models;
 using Microsoft.AspNetCore.Authorization;
+using tl2_tp10_2023_Kumbhal.ViewModels;
 
 namespace tl2_tp10_2023_Kumbhal.Controllers;
 
@@ -17,45 +18,91 @@ public class UsuarioController : Controller {
 
     [HttpGet]
     public IActionResult Index(){
-        if (HttpContext.Session.GetString("Usuario") == null)
-            {
-                // Si no está autenticado, redirigir al controlador de Logueo
-                return RedirectToAction("Index", "Logueo");
-            }
-        return View(usuarioRepository.GetAll());
+        if (Log()){
+            // Si no está autenticado, redirigir al controlador de Logueo
+            return RedirectToAction("Index", "Logueo");
+        }
+        return View(new ListarUsuariosViewModel(usuarioRepository.GetAll()));
     }
 
-
     [HttpGet]
-    public IActionResult Create() => View(new Usuario());
+    public IActionResult Create(){
+        if (Log()){
+            return RedirectToAction("Index", "Logueo");
+        }
+        return View(new CrearUsuarioViewModel());
+    } 
 
     [HttpPost]
-    public IActionResult Create(Usuario usuario) {
-        usuarioRepository.Create(usuario);
-        return RedirectToAction("Index");
+    public IActionResult Create(CrearUsuarioViewModel usuario) {
+        if (!ModelState.IsValid){
+            return RedirectToAction("Index");
+        }
+        var usuarioNuevo = new Usuario(){
+            NombreDeUsuario = usuario.CUVMUsuario,
+            Contrasenia = usuario.CUVMContrasenia
+        };
+        usuarioRepository.Create(usuarioNuevo);
+        return RedirectToAction("Index", "Usuario");
     }
 
     [HttpGet]
     public IActionResult Update(int id){
-        return View(usuarioRepository.GetById(id));
+        if(Log()){
+            return RedirectToAction("Index", "Logueo");
+        }
+        return View(new ModificarUsuarioViewModel(usuarioRepository.GetById(id)));
     } 
 
     [HttpPost]
-    public IActionResult Update(Usuario usuario) {
-        usuarioRepository.Update(usuario.Id, usuario);
-        return RedirectToAction("Index");
+    public IActionResult Update(ModificarUsuarioViewModel usuarioVM){
+        if (Log()){
+            return RedirectToAction("Index", "Logueo");
+        }
+        /*if(!ModelState.IsValid){
+            return RedirectToAction("Index", "Logueo");
+        }*/
+        var usuarioNuevo = ConvertirCrearUsuarioViewModelAUsuario(usuarioVM);
+        usuarioRepository.Update(usuarioNuevo.Id, usuarioNuevo);
+        if (HttpContext.Session.GetInt32("Rol") == 2){
+            HttpContext.Session.SetString("Usuario", usuarioNuevo.NombreDeUsuario);
+            HttpContext.Session.SetInt32("Rol", (int)usuarioNuevo.RolUsuario); 
+        }
+        return RedirectToAction("Index", "Usuario");
     }
 
 
     [HttpGet]
     public IActionResult Remove(int id) {
+        if (HttpContext.Session.GetInt32("Id")==id){
+            HttpContext.Session.Remove("Id");
+            HttpContext.Session.Remove("Rol");
+            HttpContext.Session.Remove("Usuario");
+        }
         usuarioRepository.Remove(id);
-        return RedirectToAction("Index");
+        return RedirectToAction("Index", "Logueo");
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error() {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
-    private bool Logged() => HttpContext.Session != null;
+    private bool Log(){
+        return (HttpContext.Session.GetString("Usuario") == null);
+    }
+    private int NivelAdm(){
+        return (int)HttpContext.Session.GetInt32("Rol")!;
+    }
+    private int IdUsuario(){
+        return (int)HttpContext.Session.GetInt32("Id")!;
+    }
+    private Usuario ConvertirCrearUsuarioViewModelAUsuario(ModificarUsuarioViewModel usuarioVM)
+    {
+        var usuario = new Usuario();
+        usuario.Id = usuarioVM.Id;
+        usuario.NombreDeUsuario = usuarioVM.MUVMUsuario;
+        usuario.Contrasenia = usuarioVM.MUVMContrasenia;
+        usuario.RolUsuario = usuarioVM.MUVMRoles;
+        return usuario;
+    }
 }
