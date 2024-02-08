@@ -12,7 +12,10 @@ public interface ITareaRepository{
 
 namespace tl2_tp10_2023_Kumbhal.Repositories{
     public class  TareaRepository : ITareaRepository{
-        private string cadenaConexion = "Data Source=DB/kanban.db;Cache=Shared";
+        readonly string cadenaConexion;
+        public TareaRepository(string cadenaConexion) {
+            this.cadenaConexion = cadenaConexion;
+        }
         public Tarea Create(Tarea tarea){
             var query = $"INSERT INTO Tarea (id_tablero, nombre, estado, descripcion, color, id_usuario_asignado) VALUES (@idTablero, @nombre, @estado, @descripcion, @color, @idUsuarioAsignado);";
             using (SQLiteConnection connection = new SQLiteConnection(cadenaConexion)){

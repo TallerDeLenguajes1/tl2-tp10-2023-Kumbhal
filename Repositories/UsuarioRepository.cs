@@ -11,7 +11,10 @@ public interface IUsuarioRepository{
 
 namespace tl2_tp10_2023_Kumbhal.Repositories{
     public class  UsuarioRepository : IUsuarioRepository{
-        private string cadenaConexion = "Data Source=DB/kanban.db;Cache=Shared";
+        readonly string cadenaConexion;
+        public UsuarioRepository(string cadenaConexion) {
+            this.cadenaConexion = cadenaConexion;
+        }
         public void Create(Usuario usuario){
             var query = $"INSERT INTO Usuario (nombre_de_usuario, contrasenia, rol_usuario) VALUES (@nombre, @contrasenia, @rol);";
             using (SQLiteConnection connection = new SQLiteConnection(cadenaConexion)){

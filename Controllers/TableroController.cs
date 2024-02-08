@@ -9,12 +9,12 @@ namespace tl2_tp10_2023_Kumbhal.Controllers;
 
 public class TableroController : Controller {
     private readonly ILogger<TableroController> _logger;
-    UsuarioRepository usuarioRepository;
-    TableroRepository tableroRepository;
+    private readonly IUsuarioRepository _usuarioRepository;
+    private readonly ITableroRepository _tableroRepository;
 
-    public TableroController(ILogger<TableroController> logger) {
-        tableroRepository = new TableroRepository();
-        usuarioRepository = new UsuarioRepository();
+    public TableroController(ILogger<TableroController> logger, ITableroRepository tableroRepository, IUsuarioRepository usuarioRepository) {
+        _tableroRepository = tableroRepository;
+        _usuarioRepository = usuarioRepository;
         _logger = logger;
     }
 
@@ -26,9 +26,9 @@ public class TableroController : Controller {
                 return RedirectToAction("Index", "Logueo");
             }
         if (NivelAdm()==1){
-            return View(new ListarTablerosViewModel(tableroRepository.GetAll()));
+            return View(new ListarTablerosViewModel(_tableroRepository.GetAll()));
         }
-        return View(new ListarTablerosViewModel(tableroRepository.GetAllById(IdUsuario())));
+        return View(new ListarTablerosViewModel(_tableroRepository.GetAllById(IdUsuario())));
     }
 
 
@@ -37,7 +37,7 @@ public class TableroController : Controller {
         if (Log()){
             return RedirectToAction("Index", "Logueo");
         }
-        return View(new CrearTablerosViewModel(usuarioRepository.GetAll()));
+        return View(new CrearTablerosViewModel(_usuarioRepository.GetAll()));
     } 
 
     [HttpPost]
@@ -45,7 +45,7 @@ public class TableroController : Controller {
         if (Log()){
             return RedirectToAction("Index", "Logueo");
         }
-        tableroRepository.Create(tablero);
+        _tableroRepository.Create(tablero);
         return RedirectToAction("Index");
     }
 
@@ -54,7 +54,7 @@ public class TableroController : Controller {
         if (Log()){
             return RedirectToAction("Index", "Logueo");
         }
-        return View(new ModificarTableroViewModel(tableroRepository.GetById(id), usuarioRepository.GetAll()));
+        return View(new ModificarTableroViewModel(_tableroRepository.GetById(id), _usuarioRepository.GetAll()));
     }
 
     [HttpPost]
@@ -63,14 +63,14 @@ public class TableroController : Controller {
             return RedirectToAction("Index", "Logueo");
         }
         var tableroNuevo = ConvertirCrearTableroViewModelATablero(tableroVM);
-        tableroRepository.Update(tableroNuevo.Id, tableroNuevo);
+        _tableroRepository.Update(tableroNuevo.Id, tableroNuevo);
         return RedirectToAction("Index", "Tablero");
     }
 
 
     [HttpGet]
     public IActionResult Remove(int id) {
-        tableroRepository.Remove(id);
+        _tableroRepository.Remove(id);
         return RedirectToAction("Index");
     }
 

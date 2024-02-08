@@ -8,10 +8,10 @@ namespace tl2_tp10_2023_Kumbhal.Controllers;
 
 public class TareaController : Controller {
     private readonly ILogger<TareaController> _logger;
-    TareaRepository tareaRepository;
+    private ITareaRepository tareaRepository;
 
-    public TareaController(ILogger<TareaController> logger) {
-        tareaRepository = new TareaRepository();
+    public TareaController(ILogger<TareaController> logger, ITareaRepository _tareaRepository) {
+        tareaRepository = _tareaRepository;
         _logger = logger;
     }
 

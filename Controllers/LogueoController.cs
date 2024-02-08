@@ -7,10 +7,10 @@ using tl2_tp10_2023_Kumbhal.ViewModels;
 namespace tl2_tp10_2023_Kumbhal.Controllers;
 public class LogueoController : Controller{
     private readonly ILogger<LogueoController> _logger;
-    UsuarioRepository usuarioRepository;
-    public LogueoController(ILogger<LogueoController> logger)
+    private IUsuarioRepository usuarioRepository;
+    public LogueoController(ILogger<LogueoController> logger, IUsuarioRepository _usuarioRepository)
     {
-        usuarioRepository = new UsuarioRepository();
+        usuarioRepository = _usuarioRepository;
         _logger = logger;
     }
     [HttpGet]

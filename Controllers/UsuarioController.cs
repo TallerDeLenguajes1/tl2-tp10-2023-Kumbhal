@@ -9,18 +9,23 @@ namespace tl2_tp10_2023_Kumbhal.Controllers;
 
 public class UsuarioController : Controller {
     private readonly ILogger<UsuarioController> _logger;
-    UsuarioRepository usuarioRepository;
+    private readonly IUsuarioRepository usuarioRepository;
 
-    public UsuarioController(ILogger<UsuarioController> logger) {
-        usuarioRepository = new UsuarioRepository();
+    public UsuarioController(ILogger<UsuarioController> logger, IUsuarioRepository _usuarioRepository) {
+        usuarioRepository = _usuarioRepository;
         _logger = logger;
     }
 
     [HttpGet]
     public IActionResult Index(){
-        if (Log()){
+        try{
+            if (Log()){
             // Si no está autenticado, redirigir al controlador de Logueo
-            return RedirectToAction("Index", "Logueo");
+                return RedirectToAction("Index", "Logueo");
+            }
+        }catch(Exception ex){
+            _logger.LogError("Que malo que sos");
+            return BadRequest();
         }
         return View(new ListarUsuariosViewModel(usuarioRepository.GetAll()));
     }
