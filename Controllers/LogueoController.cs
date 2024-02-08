@@ -2,6 +2,7 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using tl2_tp10_2023_Kumbhal.Repositories;
 using tl2_tp10_2023_Kumbhal.Models;
+using tl2_tp10_2023_Kumbhal.ViewModels;
 
 namespace tl2_tp10_2023_Kumbhal.Controllers;
 public class LogueoController : Controller{
@@ -15,13 +16,13 @@ public class LogueoController : Controller{
     [HttpGet]
     public IActionResult Index()
     {
-        return View();
+        return View(new LoginViewModel());
     }
 
     [HttpPost]
-    public IActionResult Login(string usuario, string contrasenia){
+    public IActionResult Login(LoginViewModel usuario){
         var usuarios = usuarioRepository.GetAll();
-        var usuarioLogueado = usuarios.FirstOrDefault(usuarioLog => usuarioLog.NombreDeUsuario == usuario && usuarioLog.Contrasenia == contrasenia);
+        var usuarioLogueado = usuarios.FirstOrDefault(usuarioLog => usuarioLog.NombreDeUsuario == usuario.VMUsuario && usuarioLog.Contrasenia == usuario.VMContrasenia);
         if (usuarioLogueado == null){
             return RedirectToAction("Index");
         }
