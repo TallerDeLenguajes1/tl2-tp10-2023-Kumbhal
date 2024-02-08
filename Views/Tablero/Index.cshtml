@@ -1,36 +1,36 @@
 @{
     ViewData["Title"] = "Home Page";
 }
-
-@model List<Tablero>
+@using tl2_tp10_2023_Kumbhal.ViewModels
+@model ListarTablerosViewModel
 
 <table class="table">
-    <thead class="thead-dark">
-        <tr>
-        <th scope="col">Id</th>
-        <th scope="col">Nombre</th>
-        <th scope="col">Descripcion</th>
-        <th scope="col">Id Propietario</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach(Tablero tablero in Model) {
+        <thead class="thead-dark">
             <tr>
-                <td>@tablero.Id</td>
-                <td>@tablero.Nombre</td>
-                <td>@tablero.Descripcion</td>
-                <td>@tablero.IdUsuarioPropietario</td>
-                <td>
-                    <button class="btn btn-primary">
-                        <a asp-controller="Tablero" asp-action="Update" asp-route-id="@tablero.Id" class="badge badge-primary">Update</a>
-                    </button>
-                    <button class="btn btn-primary">
-                        <a asp-controller="Tablero" asp-action="Remove" asp-route-id="@tablero.Id" class="badge badge-primary">Remove</a>
-                    </button>
-                </td>
+            <th scope="col">Id</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Descripcion</th>
+            <th scope="col">Id Propietario</th>
             </tr>
-        }
-    </tbody>
+        </thead>
+        <tbody>
+            @foreach(Tablero tablero in Model.listadoTableros) {
+                <tr>
+                    <td>@tablero.Id</td>
+                    <td>@tablero.Nombre</td>
+                    <td>@tablero.Descripcion</td>
+                    <td>@tablero.IdUsuarioPropietario</td>
+                    <td>
+                        <button class="btn btn-primary">
+                            <a asp-controller="Tablero" asp-action="Update" asp-route-id="@tablero.Id" class="badge badge-primary">Update</a>
+                        </button>
+                        <button class="btn btn-primary">
+                            <a asp-controller="Tablero" asp-action="Remove" asp-route-id="@tablero.Id" class="badge badge-primary">Remove</a>
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
     <button class="btn btn-outline-primary">
         <a asp-controller="Tablero" asp-action="Create">Create Tablero</a>
     </button>

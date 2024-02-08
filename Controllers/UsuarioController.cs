@@ -35,8 +35,8 @@ public class UsuarioController : Controller {
 
     [HttpPost]
     public IActionResult Create(CrearUsuarioViewModel usuario) {
-        if (!ModelState.IsValid){
-            return RedirectToAction("Index");
+        if (Log()){
+            return RedirectToAction("Index", "Logueo");
         }
         var usuarioNuevo = new Usuario(){
             NombreDeUsuario = usuario.CUVMUsuario,
