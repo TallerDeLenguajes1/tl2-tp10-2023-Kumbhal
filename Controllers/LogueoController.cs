@@ -20,16 +20,16 @@ public class LogueoController : Controller{
 
     [HttpPost]
     public IActionResult Login(string usuario, string contrasenia){
-        var usuarioLogueado = usuarioRepository.GetAll().FirstOrDefault(u => u.NombreDeUsuario == usuario && u.Contrasenia == contrasenia);
+        var usuarios = usuarioRepository.GetAll();
+        var usuarioLogueado = usuarios.FirstOrDefault(usuarioLog => usuarioLog.NombreDeUsuario == usuario && usuarioLog.Contrasenia == contrasenia);
         if (usuarioLogueado == null){
             return RedirectToAction("Index");
         }
         LoguearUsuario(usuarioLogueado);
-        return RedirectToRoute(new {controller = "Usuario", action = "Index"});
+        return RedirectToAction("Index", "Home");
     }
     public void LoguearUsuario(Usuario usuarioLogueo){
         HttpContext.Session.SetString("Usuario", usuarioLogueo.NombreDeUsuario!);
-        HttpContext.Session.SetString("Contrasenia", usuarioLogueo.Contrasenia!);
         HttpContext.Session.SetInt32("Rol", usuarioLogueo.RolUsuario);
     }
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

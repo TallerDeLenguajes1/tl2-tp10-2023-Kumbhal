@@ -2,6 +2,7 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using tl2_tp10_2023_Kumbhal.Repositories;
 using tl2_tp10_2023_Kumbhal.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace tl2_tp10_2023_Kumbhal.Controllers;
 
@@ -15,7 +16,14 @@ public class UsuarioController : Controller {
     }
 
     [HttpGet]
-    public IActionResult Index() => View(usuarioRepository.GetAll());
+    public IActionResult Index(){
+        if (HttpContext.Session.GetString("Usuario") == null)
+            {
+                // Si no está autenticado, redirigir al controlador de Logueo
+                return RedirectToAction("Index", "Logueo");
+            }
+        return View(usuarioRepository.GetAll());
+    }
 
 
     [HttpGet]
@@ -49,4 +57,5 @@ public class UsuarioController : Controller {
     public IActionResult Error() {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
+    private bool Logged() => HttpContext.Session != null;
 }

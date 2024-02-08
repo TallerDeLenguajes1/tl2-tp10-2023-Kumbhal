@@ -45,7 +45,9 @@ namespace tl2_tp10_2023_Kumbhal.Repositories{
                     while(reader.Read()){
                         var usuario = new Usuario();
                             usuario.Id = Convert.ToInt32(reader["id"]);
+                            usuario.Contrasenia = reader["contrasenia"].ToString();
                             usuario.NombreDeUsuario = reader["nombre_de_usuario"].ToString();
+                            usuario.RolUsuario = Convert.ToInt32(reader["rol_usuario"]);
                         listaUsuarios.Add(usuario);
                     }
                 connection.Close();
